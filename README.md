@@ -1,4 +1,4 @@
-# hypr-waybar-eww-kfw
+# waybar-eww-kfw
 
 Hyprland + Waybar + Eww configuration with two interchangeable media profiles:
 - bridge — modern integration using [mpris-bridge](https://github.com/WynonnaSR/mpris-bridge) (recommended)
