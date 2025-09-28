@@ -21,7 +21,6 @@ Key benefits:
 
 - `.config/waybar/config.jsonc` — Media module wired to `mpris-bridgec watch`
 - `.config/eww/eww.yuck` — Listens to `$XDG_RUNTIME_DIR/mpris-bridge/events.jsonl` and uses CLI for controls
-- `.config/systemd/user/mpris-bridged.service` — User service for the daemon
 - `.config/mpris-bridge/config.toml.example` — Example daemon config (copied to `~/.config/mpris-bridge/config.toml` if missing)
 - `scripts/install-mpris-bridge.sh` — Installer that fetches binaries, installs the unit, and seeds config if absent
 
@@ -31,20 +30,15 @@ These are example configs intended to be symlinked into `~/.config` by the repos
 
 ## Install and switch
 
-1) Install mpris-bridge binaries, unit, and seed config (once):
+1) Install the bridge profile (copies configs with overwrite, installs mpris-bridge binaries + unit from upstream, seeds config if missing):
 ```bash
-bash integrations/media/bridge/scripts/install-mpris-bridge.sh
+bash scripts/install-media.sh bridge
 ```
 
-2) Select the bridge profile (from the repo root):
+2) (Optional) Switch at runtime between profiles:
 ```bash
-bash scripts/switch-media.sh bridge
+bash scripts/switch-media.sh bridge   # or legacy
 ```
-
-This will:
-- install/update `~/.config/systemd/user/mpris-bridged.service`
-- symlink Waybar/Eww configs into `~/.config`
-- enable and start `mpris-bridged`
 
 3) Restart Waybar/Eww (or your session) if needed.
 

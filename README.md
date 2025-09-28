@@ -4,9 +4,9 @@ Hyprland + Waybar + Eww configuration with two interchangeable media profiles:
 - bridge — modern integration using [mpris-bridge](https://github.com/WynonnaSR/mpris-bridge) (recommended)
 - legacy — original shell-based setup (compatibility)
 
-This repository keeps both profiles side by side and provides a simple switcher that:
-- symlinks the “active” configs into your `~/.config` (Waybar and Eww)
-- enables/disables the `mpris-bridged` user service when using the bridge profile
+This repository keeps both profiles side by side and provides:
+- unified installer that copies configs and sets up services per chosen profile
+- simple switcher that flips live configs and toggles the `mpris-bridged` user service
 
 Profiles:
 - Bridge profile docs: [integrations/media/bridge/README.md](integrations/media/bridge/README.md)
@@ -25,7 +25,7 @@ General:
 Bridge profile:
 - Packages: `playerctl`, `systemd` (for `busctl` user scope), `hyprctl` (for focus hints on Hyprland)
 - Binaries installed from mpris-bridge releases: `mpris-bridged`, `mpris-bridgec`
-- User unit: `mpris-bridged.service` (provided in this repo, installed by the switcher/installer)
+- User unit: `mpris-bridged.service` (fetched from upstream repo during install)
 
 Legacy profile:
 - Whatever your shell scripts require (fish/jq/etc.) — see the legacy folder
@@ -34,20 +34,12 @@ Legacy profile:
 
 ## Quick start (bridge, recommended)
 
-1) Install mpris-bridge (pulls latest release binaries and installs the user unit)
+1) Install bridge profile (copies configs, installs binaries + unit from upstream, seeds config):
 ```bash
-bash integrations/media/bridge/scripts/install-mpris-bridge.sh
-```
-This installer also seeds the daemon config if missing:
-- If `~/.config/mpris-bridge/config.toml` does not exist, it is created from:
-  `integrations/media/bridge/.config/mpris-bridge/config.toml.example`
-
-2) Switch to the bridge profile
-```bash
-bash scripts/switch-media.sh bridge
+bash scripts/install-media.sh bridge
 ```
 
-3) Restart Waybar/Eww (or your session) if needed, then verify:
+2) Restart Waybar/Eww (or your session) if needed, then verify:
 ```bash
 mpris-bridgec watch --truncate 80 --pango-escape
 tail -f "$XDG_RUNTIME_DIR/mpris-bridge/events.jsonl" | head
@@ -73,13 +65,17 @@ Notes:
 
 ---
 
-## Switch back to legacy
+## Install or switch to legacy
 
+Install legacy (copies configs and tools from legacy profile, disables bridge daemon):
 ```bash
-bash scripts/switch-media.sh legacy
+bash scripts/install-media.sh legacy
 ```
 
-This disables the `mpris-bridged` service and symlinks the legacy configs back into `~/.config`.
+Switch at runtime (toggle configs and service state):
+```bash
+bash scripts/switch-media.sh legacy   # or bridge
+```
 
 ---
 
@@ -88,17 +84,17 @@ This disables the `mpris-bridged` service and symlinks the legacy configs back i
 - integrations/media/bridge/.config/…
   - Waybar media module for bridge (exec uses `mpris-bridgec watch`)
   - Eww media widgets for bridge (listen to `$XDG_RUNTIME_DIR/mpris-bridge/events.jsonl`)
-  - User unit: `mpris-bridged.service`
   - Example daemon config: `.config/mpris-bridge/config.toml.example`
 - integrations/media/bridge/scripts/install-mpris-bridge.sh
-  - One-shot installer that fetches latest mpris-bridge binaries, installs the unit, and seeds config if absent
+  - Helper that fetches latest mpris-bridge binaries + unit from upstream, and seeds config if absent
 - integrations/media/legacy/.config/…
   - Original shell-based configuration and scripts
 - scripts/switch-media.sh
   - Profile switcher (bridge | legacy) that:
-    - installs/updates the user unit for bridge,
-    - symlinks active Waybar/Eww configs into `~/.config`,
-    - enables/disables `mpris-bridged`
+    - toggles the `mpris-bridged` user service for bridge
+    - updates live Waybar/Eww configs
+ - scripts/install-media.sh
+   - Unified installer that copies files for the chosen profile and sets up services
 
 ---
 

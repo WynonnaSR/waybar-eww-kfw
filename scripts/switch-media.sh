@@ -14,7 +14,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # Источники профилей (под твою структуру)
 SRC_BRIDGE_WAYBAR="${ROOT}/integrations/media/bridge/.config/waybar/config.jsonc"
 SRC_BRIDGE_EWW="${ROOT}/integrations/media/bridge/.config/eww/eww.yuck"
-SRC_BRIDGE_UNIT="${ROOT}/integrations/media/bridge/.config/systemd/user/mpris-bridged.service"
+SRC_BRIDGE_UNIT=""
 
 SRC_LEGACY_WAYBAR="${ROOT}/integrations/media/legacy/.config/waybar/config.jsonc"
 SRC_LEGACY_EWW="${ROOT}/integrations/media/legacy/.config/eww/eww.yuck"
@@ -23,11 +23,10 @@ mkdir -p "$(dirname "$WAYBAR_CFG")" "$(dirname "$EWW_YUCK")" "$UNIT_DIR"
 
 case "$MODE" in
   bridge)
-    # Ставим/обновляем юнит и включаем сервис
-    install -Dm644 "$SRC_BRIDGE_UNIT" "${UNIT_DIR}/mpris-bridged.service"
-    systemctl --user daemon-reload
-    systemctl --user enable --now mpris-bridged || true
-    systemctl --user restart mpris-bridged || true
+  # Предполагаем, что юнит уже установлен установщиком bridge; просто убедимся, что сервис активен
+  systemctl --user daemon-reload || true
+  systemctl --user enable --now mpris-bridged 2>/dev/null || true
+  systemctl --user restart mpris-bridged 2>/dev/null || true
 
     # Симлинки конфигов
     ln -sf "$SRC_BRIDGE_WAYBAR" "$WAYBAR_CFG"
