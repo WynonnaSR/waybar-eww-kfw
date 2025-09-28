@@ -1,4 +1,14 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+> LEGACY PROFILE NOTICE
+>
+> This directory contains the legacy, shell-based media setup (playerctl/fish/jq/etc).
+> The recommended profile is the bridge profile powered by mpris-bridge.
+> See the modern profile here:
+> - Bridge profile docs: ../../bridge/README.md
+> - Project root overview and switching instructions: ../../../README.md
+>
+> Status: kept for compatibility; new features land in the bridge profile. This profile may receive bug fixes only.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](../../../LICENSE)
 
 Note: This setup is based on and slightly modified from Maxi-gasti’s repo:
 https://github.com/Maxi-gasti/My-Linux-Rice-hypr-waybar-eww — big thanks to them for the great Waybar and EWW widget!
@@ -192,4 +202,4 @@ See `man swww-img` for full options.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT — see [LICENSE](../../../LICENSE).
