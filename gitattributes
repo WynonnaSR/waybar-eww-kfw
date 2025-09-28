@@ -1,0 +1,22 @@
+# Normalize line endings and enforce LF where needed
+
+# Default: auto-detect text files and normalize line endings in repo to LF
+* text=auto
+
+# Shell scripts and helpers (keep LF on checkout)
+*.sh          text eol=lf
+*.fish        text eol=lf
+.local/bin/wall text eol=lf
+
+# Common config/text files used by Wayland/Linux tools (prefer LF)
+*.yuck        text eol=lf
+*.scss        text eol=lf
+*.jsonc       text eol=lf
+*.conf        text eol=lf
+*.css         text eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary

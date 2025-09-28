@@ -1,0 +1,104 @@
+#!/usr/bin/env fish
+# wall: set wallpaper by index with flexible extension and optional transitions.
+# Usage:
+#   wall <1..8 | 001..008> [swww-options...]
+# Defaults:
+#   - DIR = ~/Pictures/wallpapers/quick (override via $WALL_DIR).
+#   - If no transition flags are provided, adds:
+#       --transition-type grow
+#       --transition-pos <random corner: top-left | top-right | bottom-left | bottom-right>
+# Notes:
+#   - --transition-pos accepts aliases: center, top, left, right, bottom, top-left, top-right, bottom-left, bottom-right.
+#   - Supported extensions (case-insensitive): jpg, jpeg, png, webp, avif, bmp.
+
+# Require at least one argument (the index)
+if test (count $argv) -lt 1
+  echo "Usage: wall <1..8 | 001..008> [swww-options...]"
+  exit 1
+end
+
+# Target directory
+if set -q WALL_DIR
+  set dir "$WALL_DIR"
+else
+  set dir "$HOME/Pictures/wallpapers/quick"
+end
+
+# Parse and validate index
+set raw $argv[1]
+set -e argv[1]  # shift; remaining args go to swww img
+
+# Numeric check
+if not string match -rq '^[0-9]+$' -- $raw
+  echo "Error: index must be a number in range 1..8 (e.g., 1 or 001)."
+  exit 1
+end
+
+# Range enforce 1..8
+set n (math "$raw + 0")
+if test $n -lt 1 -o $n -gt 8
+  echo "Error: index out of range. Only 1..8 are allowed."
+  exit 1
+end
+
+# Zero-pad to 3 digits (1 -> 001)
+set num (printf "%03d" $n)
+
+# Resolve file by extension (case-insensitive)
+set exts jpg JPG jpeg JPEG png PNG webp WEBP avif AVIF bmp BMP
+set file ""
+for ext in $exts
+  set candidate "$dir/$num.$ext"
+  if test -f "$candidate"
+    set file "$candidate"
+    break
+  end
+end
+
+# Fallback: any suffix for rare extensions
+if test -z "$file"
+  for candidate in $dir/$num.*
+    if test -f "$candidate"
+      set file "$candidate"
+      break
+    end
+  end
+end
+
+if test -z "$file"
+  echo "No wallpaper found for $num in $dir"
+  exit 1
+end
+
+# Ensure swww-daemon is running
+if not pgrep -x swww-daemon >/dev/null 2>&1
+  swww-daemon >/dev/null 2>&1 &
+  sleep 0.2
+end
+
+# Detect if user provided transition flags
+set has_type 0
+set has_pos 0
+for a in $argv
+  if string match -q -- '--transition-type*' $a
+    set has_type 1
+  end
+  if string match -q -- '--transition-pos*' $a
+    set has_pos 1
+  end
+end
+
+# Defaults if not supplied:
+set default_args
+if test $has_type -eq 0
+  set -a default_args --transition-type grow
+end
+if test $has_pos -eq 0
+  # Random among corner aliases (avoids coordinate confusion)
+  set corners top-left top-right bottom-left bottom-right
+  set pos (random choice $corners)
+  set -a default_args --transition-pos $pos
+end
+
+# Execute swww
+exec swww img "$file" $default_args $argv
