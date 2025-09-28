@@ -1,0 +1,214 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+
+  // ---------- MODULES
+
+    "modules-left": [
+      "group/arch",
+      "group/hardware",
+      "hyprland/workspaces",
+      "custom/terminal",
+      "custom/browser",
+      "custom/nvim",
+      "custom/discord",
+      "custom/steam",
+      "hyprland/window"
+    ],
+  "modules-center": [
+    "custom/media"
+  ],
+    "modules-right": [
+      "pulseaudio",
+      "network",
+      "battery",
+      "tray",
+      "custom/weather",
+      "clock",
+      "custom/menu"
+    ],
+
+  // LEFT MODULES
+
+    "group/arch": {
+      "orientation": "horizontal",
+      "drawer": {
+        "transition-duration": 500,
+        "children-class": "not-power",
+        "transition-left-to-right": true
+      },
+      "modules": [
+        "image",
+        "custom/poweroff",
+        "custom/reboot",
+        "custom/logout"
+      ]
+    },
+
+  // FIRST GROUP
+
+    "image": {
+        "path": "/home/orcaex/.config/waybar/img/arch.png",
+        "size": 18,
+        "tooltip": false,
+        "on-click": "wofi --show drun",
+        "format": ""
+    },
+    "custom/poweroff": {
+      "format": "",
+      "tooltip": false,
+      "on-click": "shutdown now"
+      },
+    "custom/reboot": {
+      "format": "󰜉",
+      "tooltip": false,
+      "on-click": "reboot"
+    },
+    "custom/logout": {
+      "format": "󰗼",
+      "tooltip": false,
+      "on-click": "hyprctl dispatch exit"
+    },
+
+
+  // SECOND GROUP
+
+    "group/hardware": {
+      "orientation": "horizontal",
+      "drawer": {
+        "transition-duration": 500,
+        "children-class": "not-power",
+        "transition-left-to-right": true,
+        "click-to-reveal": true 	
+      },
+      "modules": [
+        "custom/hardware",
+        "cpu",
+        "memory",
+        "temperature"
+      ]
+    },
+
+    "custom/hardware": {
+      "format": "",
+      "tooltip": false
+    },
+    "cpu": { 
+         "interval": 4,
+         "format": "<span color='#ff2020'></span> {usage}%"
+    },
+    "memory": {
+         "interval": 4,
+         "format": "<span color='#94bf00'></span> {used:0.1f}G",
+         "tooltip": false
+    },
+    "temperature": {
+         "tooltip": false,
+         "format": "<span color='#e5c07b'></span> {temperatureC}°C",
+         "critical-threshold": 80,
+         "format-critical": "<span color='#ff505b'></span> {temperatureC}°C"
+    },
+
+
+    "custom/terminal": {
+      "format": "",
+      "tooltip": false,
+      "on-click": "kitty -e fish -c 'fastfetch; fish'"
+    },
+    "custom/browser": {
+      "format": "󰈹",
+      "tooltip": false,
+      "on-click": "firefox"
+    },
+    "custom/nvim": {
+      "format": "",
+      "tooltip": false,
+      "on-click": "kitty -e fish -c 'nvim'"
+    },
+    "custom/discord": {
+      "format": "",
+      "tooltip": false,
+      "on-click": "discord"
+    },
+    "custom/steam": {
+      "format": " ",
+      "tooltip": false,
+      "on-click": "steam"
+    },
+
+  // CENTER MODULE
+
+  "custom/media": {
+    "format": "{}",
+    "tooltip": false,
+    "max-length": 40,
+    "exec": "mpris-bridgec watch --truncate 80 --pango-escape",
+    "on-click":        "mpris-bridgec play-pause",
+    "on-click-right":  "mpris-bridgec next",
+    "on-click-middle": "mpris-bridgec previous",
+    "on-scroll-up":    "mpris-bridgec seek 5",
+    "on-scroll-down":  "mpris-bridgec seek -5"
+  },
+
+  // RIGHT MODULES
+
+    "pulseaudio": {
+        "scroll-step": 2, // %, can be a float
+        "format": "<span color='#a58Ff0'>{icon}</span>  {volume}%", //"{icon}  {volume}% {format_source}",
+        "format-bluetooth": " {icon} {volume}%",
+        "format-bluetooth-muted": "  {icon}",
+        "format-muted": "<span color='#b53F30'></span>",
+        "tooltip": false,
+        "format-source": "",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol",
+        "on-click-right": "kitty --class pw-top -e pw-top"
+    },
+    "network": {
+        "format-wifi": "{essid} ({signalStrength}%) <span color='#009940'></span>",
+        "format-ethernet": "<span color='#009940'></span>  {ifname}",
+        "interval": 3,
+        "tooltip-format": "{ipaddr}/{cidr} via {gwaddr}",
+        "format-linked": "<span color='#009940'></span>  {ifname} (No IP)",
+        "format-disconnected": "Disconnected ⚠ {ifname}",
+        "format-alt": "<span color='#009940'></span>  {ifname}: ⭡{bandwidthUpBytes} ⭣{bandwidthDownBytes}"
+    },
+    "tray": {
+        "icon-size": 15,
+        "spacing": 10
+    },
+    "clock": {
+        "timezone": "Asia/Tashkent",
+        "tooltip": false,
+        "format": "<span color='#e0d080'></span> {:%H:%M %d-%m}",
+        "format-alt": "<span color='#e0d080'></span> {:%A, %d %B %Y}"
+    },
+    "custom/menu": {
+        "format": " ",
+        "tooltip": false,
+        "on-click": "fish -c 'eww -c $HOME/.config/eww daemon >/dev/null 2>&1; or true; sleep 0.2; eww -c $HOME/.config/eww open --toggle services'"
+  },
+    
+  // Weather module: uses wttr.in via a small fish script
+  "custom/weather":{
+    "exec": "~/.config/waybar/scripts/weather.fish",
+    "interval": 1800,
+    "format": "{}"
+  },
+  
+  "hyprland/window": {
+    "tooltip": false,
+    "max-length": 40,
+    "format": "{title}"
+  }
+}
