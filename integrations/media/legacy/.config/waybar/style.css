@@ -1,6 +1,6 @@
 * {
     border: none;   
-    font-family: "Hack Nerd Font","Font Awesome","Fira Code", sans-serif;
+    font-family: "Hack Nerd Font","Fira Code", sans-serif;
     font-size: 12px;
 }
 
@@ -80,16 +80,32 @@ window#waybar {
   font-size: 15px;
 }
 
-#clock, #image, #custom-reboot, #custom-poweroff, #custom-logout, #custom-hardware, #custom-terminal, #custom-browser, #custom-nvim, #custom-discord, #custom-steam, #battery, #network, #tray, #pulseaudio, #temperature, #cpu, #memory, #custom-media,#custom-menu {
+/* include weather widget into common styling */
+#clock, #image, #custom-reboot, #custom-poweroff, #custom-logout, #custom-hardware, #custom-terminal, #custom-browser, #custom-nvim, #custom-discord, #custom-steam, #battery, #network, #tray, #pulseaudio, #temperature, #cpu, #memory, #custom-media, #custom-menu, #custom-weather {
     padding: 0 10px;
     background-color: rgba(0,0,0,0.8);
     transition: all 0.3s ease;
     margin-top: 10px;
 }
 
-#cpu:hover, #custom-poweroff:hover, #custom-reboot:hover, #custom-logout:hover,#custom-hardware:hover, #memory:hover,#custom-terminal:hover,#custom-browser:hover,#custom-nvim:hover, #custom-discord:hover,#custom-steam:hover, #clock:hover, #battery:hover, #network:hover, #tray:hover, #pulseaudio:hover, #temperature:hover, #custom-media:hover,#custom-menu {
+#cpu:hover, #custom-poweroff:hover, #custom-reboot:hover, #custom-logout:hover, #custom-hardware:hover, #memory:hover, #custom-terminal:hover, #custom-browser:hover, #custom-nvim:hover, #custom-discord:hover, #custom-steam:hover, #clock:hover, #battery:hover, #network:hover, #tray:hover, #pulseaudio:hover, #temperature:hover, #custom-media:hover, #custom-menu:hover, #custom-weather:hover {
   color: #ffffff;
 } 
+
+/* ----- Tooltip styling (slightly larger font, consistent dark theme) ----- */
+
+tooltip {
+  background-color: rgba(0,0,0,0.92);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 6px 8px;
+}
+
+tooltip label {
+  font-family: "Symbols Nerd Font Mono","Hack Nerd Font Mono","FiraCode Nerd Font Mono","CaskaydiaCove Nerd Font Mono","Noto Sans Mono", monospace;
+  font-size: 13px;
+  color: #a9b1d6;
+}
 
 /* #battery.charging {
     color: #98c379;

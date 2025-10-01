@@ -187,6 +187,16 @@
         "icon-size": 15,
         "spacing": 10
     },
+
+    // Weather module: now returns JSON (symbol in bar, detailed English tooltip)
+    "custom/weather":{
+      "exec": "~/.config/waybar/scripts/weather.fish",
+      "interval": 1800,
+      "format": "{}",
+      "return-type": "json",
+      "tooltip": true
+    },
+
     "clock": {
         "timezone": "Asia/Tashkent",
         "tooltip": false,
@@ -197,13 +207,6 @@
         "format": " ",
         "tooltip": false,
         "on-click": "fish -c 'eww -c $HOME/.config/eww daemon >/dev/null 2>&1; or true; sleep 0.2; eww -c $HOME/.config/eww open --toggle services'"
-  },
-    
-  // Weather module: uses wttr.in via a small fish script
-  "custom/weather":{
-    "exec": "~/.config/waybar/scripts/weather.fish",
-    "interval": 1800,
-    "format": "{}"
   },
   
   "hyprland/window": {
